@@ -2,12 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class SchedulingGUI extends JFrame {
 
     private ArrayList<Process> processLogs;
 
-    public SchedulingGUI( ArrayList<Process> processLogs , List<Process> processesInformation ) {
+    public SchedulingGUI(ArrayList<Process> processLogs, List<Process> processesInformation) {
         this.processLogs = processLogs;
         setTitle("CPU Scheduling Graph");
         setSize(800, 600);
@@ -22,9 +24,18 @@ public class SchedulingGUI extends JFrame {
                 drawGraph(g);
             }
         };
-        graphPanel.setPreferredSize(new Dimension(600, 300));
+
+        // Calculate dynamic width based on the number of processLogs
+        int unitWidth = 40; // Width of each unit
+        int totalWidth = processLogs.size() * unitWidth; // Total width based on the number of processes
+        graphPanel.setPreferredSize(new Dimension(totalWidth, 300)); // Set preferred size dynamically
         graphPanel.setBackground(Color.WHITE);
-        add(graphPanel, BorderLayout.CENTER);
+
+        // Wrap the graphPanel in a JScrollPane for horizontal scrolling
+        JScrollPane graphScrollPane = new JScrollPane(graphPanel);
+        graphScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        graphScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        add(graphScrollPane, BorderLayout.CENTER);
 
         // Right section: Process Info
         JPanel processInfoPanel = new JPanel();
@@ -61,48 +72,46 @@ public class SchedulingGUI extends JFrame {
     }
 
     private void drawGraph(Graphics g) {
-        int xStart = 20; // الموضع الأفقي الأولي
-        int rowHeight = 30; // ارتفاع كل سطر
-        int unitWidth = 40; // عرض كل وحدة
-        int yStart = 50; // الموضع العمودي الأولي
+        int xStart = 20; // Starting horizontal position
+        int rowHeight = 30; // Height of each row
+        int unitWidth = 40; // Width of each unit
+        int yStart = 50; // Starting vertical position
 
-        // تحديد موقع السطر لكل عملية بناءً على اسمها
-        java.util.Map<String, Integer> processRows = new java.util.HashMap<>();
+        // Mapping each process to a row based on its name
+        Map<String, Integer> processRows = new HashMap<>();
         int currentRow = 0;
 
         for (Process process : processLogs) {
             String processName = process != null ? process.getName() : "Idle";
-            // تحديد السطر للعملية
+            // Assign a row for each process
             if (!processRows.containsKey(processName)) {
                 processRows.put(processName, currentRow++);
             }
 
-            int y = yStart + (processRows.get(processName) * rowHeight); // الموضع العمودي بناءً على العملية
-            int x = xStart; // الموضع الأفقي يبدأ من اليسار
+            int y = yStart + (processRows.get(processName) * rowHeight); // Vertical position based on the process
+            int x = xStart; // Horizontal position starts from the left
 
             if (process != null) {
-                g.setColor(parseColor(process.getColor())); // تحديد لون العملية
-                g.fillRect(x, y, unitWidth, rowHeight - 10); // رسم مستطيل للوحدة
-                g.setColor(Color.BLACK); // رسم الإطار
+                g.setColor(parseColor(process.getColor())); // Set color for the process
+                g.fillRect(x, y, unitWidth, rowHeight - 10); // Draw the unit rectangle
+                g.setColor(Color.BLACK); // Draw the border
                 g.drawRect(x, y, unitWidth, rowHeight - 10);
-                g.drawString(process.getName(), x + 5, y + 20); // كتابة اسم العملية
+                g.drawString(process.getName(), x + 5, y + 15); // Draw the process name
             } else {
-                // وقت الخمول (Idle)
+                // Idle time
                 g.setColor(Color.LIGHT_GRAY);
                 g.fillRect(x, y, unitWidth, rowHeight - 10);
                 g.setColor(Color.BLACK);
                 g.drawRect(x, y, unitWidth, rowHeight - 10);
-                g.drawString("Idle", x + 5, y + 20);
+                g.drawString("Idle", x + 5, y + 15);
             }
 
-            // تحريك الموضع الأفقي للوحدة التالية
+            // Move horizontal position to the next unit
             xStart += unitWidth;
         }
     }
 
-
-
-    // دالة لتحليل النص إلى لون
+    // Method to parse color from string
     private Color parseColor(String colorStr) {
         try {
             switch (colorStr.toLowerCase()) {
@@ -119,13 +128,24 @@ public class SchedulingGUI extends JFrame {
                 case "white":
                     return Color.WHITE;
                 default:
-                    // افترض أن اللون بصيغة Hex (مثل #FF0000)
+                    // Assume the color is in Hex format (like #FF0000)
                     return Color.decode(colorStr);
             }
         } catch (NumberFormatException e) {
-            // إذا كان اللون غير معروف، استخدم لونًا افتراضيًا
+            // Return a default color if the color is unrecognized
             return Color.GRAY;
         }
     }
 
+    public static void main(String[] args) {
+        // Example usage with mock data for testing
+        ArrayList<Process> processLogs = new ArrayList<>();
+        // Add some test processes to processLogs here
+
+        List<Process> processesInformation = new ArrayList<>();
+        // Add some test process information to processesInformation here
+
+        SchedulingGUI gui = new SchedulingGUI(processLogs, processesInformation);
+        gui.setVisible(true);
+    }
 }
