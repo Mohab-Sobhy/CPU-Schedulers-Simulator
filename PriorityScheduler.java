@@ -67,14 +67,14 @@ public class PriorityScheduler extends Scheduler {
         if (currentProcess != null) {
 
         } else {
-            processorLogs.addLogUnit( new LogUnit(null , false ) );
+            processorLogs.addLogUnit( null );
         }
         return completedProcessesCount;
     }
 
     // تنفيذ العملية الحالية
     private void executeCurrentProcess(int currentTime, Process currentProcess , ProcessorLogs processorLogs) {
-        processorLogs.addLogUnit( new LogUnit(currentProcess.getName() , true ) );
+        processorLogs.addLogUnit( currentProcess.getName() );
         currentProcess.setBurstTime(currentProcess.getBurstTime() - 1);
     }
 }
