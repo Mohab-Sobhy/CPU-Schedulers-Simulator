@@ -11,7 +11,9 @@ public class PriorityScheduler extends Scheduler {
     }
 
     @Override
-    public void schedule() {
+    public ProcessorLogs simulate() {
+
+        ProcessorLogs processorLogs = new ProcessorLogs();
         Comparator<Process> priorityComparator = Comparator.comparingInt(Process::getPriority);
         PriorityQueue<Process> readyQueue = new PriorityQueue<>(priorityComparator);
 
@@ -29,17 +31,19 @@ public class PriorityScheduler extends Scheduler {
             if (currentProcess == null || currentProcess.getBurstTime() == 0) {
                 completedProcessesCount = handleProcessCompletion(currentTime, currentProcess);
                 currentProcess = readyQueue.poll();
-                completedProcessesCount = handleNewProcessStart(currentTime, currentProcess);
+                completedProcessesCount = handleNewProcessStart(currentTime, currentProcess, processorLogs);
             }
 
             // تنفيذ العملية الحالية إذا كانت موجودة
             if (currentProcess != null) {
-                executeCurrentProcess(currentTime, currentProcess);
+                executeCurrentProcess(currentTime, currentProcess, processorLogs);
             }
 
             // تحديث الوقت
             currentTime++;
         }
+
+        return processorLogs;
     }
 
     // إضافة العمليات التي وصلت في الوقت الحالي إلى قائمة الانتظار
@@ -53,25 +57,24 @@ public class PriorityScheduler extends Scheduler {
     // التعامل مع انتهاء العملية الحالية
     private int handleProcessCompletion(int currentTime, Process currentProcess) {
         if (currentProcess != null && currentProcess.getBurstTime() == 0) {
-            System.out.println("Terminated: " + currentProcess.getName() + " at start of " + currentTime);
             completedProcessesCount++;
         }
         return completedProcessesCount;
     }
 
     // التعامل مع بدء العملية الجديدة
-    private int handleNewProcessStart(int currentTime, Process currentProcess) {
+    private int handleNewProcessStart(int currentTime, Process currentProcess, ProcessorLogs processorLogs) {
         if (currentProcess != null) {
-            System.out.println("Starting: " + currentProcess.getName() + " at start of " + currentTime);
+
         } else {
-            System.out.println("CPU is idle at " + currentTime);
+            processorLogs.addLogUnit( new LogUnit(null , false ) );
         }
         return completedProcessesCount;
     }
 
     // تنفيذ العملية الحالية
-    private void executeCurrentProcess(int currentTime, Process currentProcess) {
-        System.out.println("Running: " + currentProcess.getName() + " at " + currentTime);
+    private void executeCurrentProcess(int currentTime, Process currentProcess , ProcessorLogs processorLogs) {
+        processorLogs.addLogUnit( new LogUnit(currentProcess.getName() , true ) );
         currentProcess.setBurstTime(currentProcess.getBurstTime() - 1);
     }
 }

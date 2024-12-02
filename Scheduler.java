@@ -9,5 +9,5 @@ public abstract class Scheduler {
         totalProcesses = processes.size();
     }
 
-    public abstract void schedule();
+    public abstract ProcessorLogs simulate();
 }
