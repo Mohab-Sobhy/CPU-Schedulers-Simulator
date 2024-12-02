@@ -48,26 +48,11 @@ public class PriorityScheduler extends Scheduler {
             currentTime++;
         }
 
-        // print the summary of scheduling
-        System.out.print("Processes execution order: ");
-        for(String processName:ProcessesExecutionOrder){
-            System.out.print(processName + " , ");
+        // calc
+        for(Process process : processes) {
+            process.setTurnaroundTime(process.getBurstTime() + process.getWaitingTime());
+            process.setCompletionTime(process.getTurnaroundTime() + process.getArrivalTime());
         }
-        System.out.println();
-
-        for(Process process : processes){
-            process.setTurnaroundTime( process.getBurstTime()+process.getWaitingTime() );
-            process.setCompletionTime( process.getTurnaroundTime()+process.getArrivalTime() );
-
-            System.out.println(process.getName() + "Waiting Time -> " + " : " + process.getWaitingTime());
-            System.out.println(process.getName() + "Turnaround Time -> " + " : " + process.getTurnaroundTime());
-
-            totalWaitingTime += process.getWaitingTime();
-            totalTurnaroundTime += process.getTurnaroundTime();
-        }
-
-        System.out.println("Average Waiting Time: " + totalWaitingTime/totalProcesses);
-        System.out.println("Average Turnaround Time: " + totalTurnaroundTime/totalProcesses);
 
 
         return processorLogs;
@@ -92,7 +77,7 @@ public class PriorityScheduler extends Scheduler {
     // التعامل مع بدء العملية الجديدة
     private int handleNewProcessStart(int currentTime, Process currentProcess, ProcessorLogs processorLogs) {
         if (currentProcess != null) {
-            ProcessesExecutionOrder.add( currentProcess.getName() );
+            //start new process
         } else {
             processorLogs.addLogUnit( null );
         }
