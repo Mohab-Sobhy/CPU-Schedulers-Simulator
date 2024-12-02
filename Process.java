@@ -8,12 +8,14 @@ public class Process {
     private int turnaroundTime;
     private int completionTime;
     private boolean isRunning;
+    private int currentBurstTime;
 
     // Constructor
     public Process(String name, int arrivalTime, int burstTime, int priority, String color) {
         this.name = name;
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
+        this.currentBurstTime = burstTime;
         this.priority = priority;
         this.color = color;
         isRunning = false;
@@ -98,6 +100,15 @@ public class Process {
 
     public void setIsRunning(boolean isRunning){
         this.isRunning = isRunning;
+    }
+
+    // Getter and Setter for CurrentBurstTime
+    public int getCurrentBurstTime(){
+        return currentBurstTime;
+    }
+
+    public void setCurrentBurstTime(int currentBurstTime){
+        this.currentBurstTime = currentBurstTime;
     }
 
     @Override

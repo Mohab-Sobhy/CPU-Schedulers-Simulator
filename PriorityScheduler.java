@@ -33,7 +33,7 @@ public class PriorityScheduler extends Scheduler {
             addNewArrivingProcessesToQueue(currentTime, readyQueue);
 
             // إذا لم تكن هناك عملية حالياً، اختر العملية التالية من قائمة الانتظار
-            if (currentProcess == null || currentProcess.getBurstTime() == 0) {
+            if (currentProcess == null || currentProcess.getCurrentBurstTime() == 0) {
                 completedProcessesCount = handleProcessCompletion(currentTime, currentProcess);
                 currentProcess = readyQueue.poll();
                 completedProcessesCount = handleNewProcessStart(currentTime, currentProcess, processorLogs);
@@ -48,12 +48,27 @@ public class PriorityScheduler extends Scheduler {
             currentTime++;
         }
 
-        for(Process process : processes){
-
-//            process.
-
-            System.out.println("Name: " + process.getName()+" Wait: "+ process.getWaitingTime());
+        // print the summary of scheduling
+        System.out.print("Processes execution order: ");
+        for(String processName:ProcessesExecutionOrder){
+            System.out.print(processName + " , ");
         }
+        System.out.println();
+
+        for(Process process : processes){
+            process.setTurnaroundTime( process.getBurstTime()+process.getWaitingTime() );
+            process.setCompletionTime( process.getTurnaroundTime()+process.getArrivalTime() );
+
+            System.out.println(process.getName() + "Waiting Time -> " + " : " + process.getWaitingTime());
+            System.out.println(process.getName() + "Turnaround Time -> " + " : " + process.getTurnaroundTime());
+
+            totalWaitingTime += process.getWaitingTime();
+            totalTurnaroundTime += process.getTurnaroundTime();
+        }
+
+        System.out.println("Average Waiting Time: " + totalWaitingTime/totalProcesses);
+        System.out.println("Average Turnaround Time: " + totalTurnaroundTime/totalProcesses);
+
 
         return processorLogs;
     }
@@ -68,7 +83,7 @@ public class PriorityScheduler extends Scheduler {
 
     // التعامل مع انتهاء العملية الحالية
     private int handleProcessCompletion(int currentTime, Process currentProcess) {
-        if (currentProcess != null && currentProcess.getBurstTime() == 0) {
+        if (currentProcess != null && currentProcess.getCurrentBurstTime() == 0) {
             completedProcessesCount++;
         }
         return completedProcessesCount;
@@ -77,7 +92,7 @@ public class PriorityScheduler extends Scheduler {
     // التعامل مع بدء العملية الجديدة
     private int handleNewProcessStart(int currentTime, Process currentProcess, ProcessorLogs processorLogs) {
         if (currentProcess != null) {
-
+            ProcessesExecutionOrder.add( currentProcess.getName() );
         } else {
             processorLogs.addLogUnit( null );
         }
@@ -87,6 +102,6 @@ public class PriorityScheduler extends Scheduler {
     // تنفيذ العملية الحالية
     private void executeCurrentProcess(int currentTime, Process currentProcess , ProcessorLogs processorLogs) {
         processorLogs.addLogUnit( currentProcess.getName() );
-        currentProcess.setBurstTime(currentProcess.getBurstTime() - 1);
+        currentProcess.setCurrentBurstTime(currentProcess.getCurrentBurstTime() - 1);
     }
 }
