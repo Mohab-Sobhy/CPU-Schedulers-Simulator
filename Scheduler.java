@@ -6,7 +6,7 @@ public abstract class Scheduler {
 
     public Scheduler(List<Process> processes) {
         this.processes = processes;
-        this.totalProcesses = processes.size();
+        totalProcesses = processes.size();
     }
 
     public abstract void schedule();

@@ -7,6 +7,7 @@ public class Process {
     private int waitingTime;
     private int turnaroundTime;
     private int completionTime;
+    private boolean isRunning;
 
     // Constructor
     public Process(String name, int arrivalTime, int burstTime, int priority, String color) {
@@ -15,6 +16,7 @@ public class Process {
         this.burstTime = burstTime;
         this.priority = priority;
         this.color = color;
+        isRunning = false;
     }
 
     // Getter and Setter for name
@@ -87,5 +89,19 @@ public class Process {
 
     public void setCompletionTime(int completionTime) {
         this.completionTime = completionTime;
+    }
+
+    // Getter and Setter for isRunning
+    public boolean getIsRunning(){
+        return isRunning;
+    }
+
+    public void setIsRunning(boolean isRunning){
+        this.isRunning = isRunning;
+    }
+
+    @Override
+    public String toString() {
+        return "Process{name='" + name + "', arrivalTime=" + arrivalTime + ", burstTime=" + burstTime + ", priority=" + priority + ", color='" + color + "'}";
     }
 }
