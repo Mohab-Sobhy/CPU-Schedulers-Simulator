@@ -17,13 +17,18 @@ public class PriorityScheduler extends Scheduler {
         Comparator<Process> priorityComparator = Comparator.comparingInt(Process::getPriority);
         PriorityQueue<Process> readyQueue = new PriorityQueue<>(priorityComparator);
 
-        processes.sort(Comparator.comparingInt(Process::getArrivalTime));
+
 
         int currentTime = 0;
         Process currentProcess = null;
 
         // استمر حتى تنتهي جميع العمليات
         while (completedProcessesCount < processes.size()) {
+
+            for (Process process : readyQueue) {
+                process.setWaitingTime( process.getWaitingTime()+1 );
+            }
+
             // إضافة العمليات التي وصلت في الوقت الحالي إلى قائمة الانتظار
             addNewArrivingProcessesToQueue(currentTime, readyQueue);
 
@@ -41,6 +46,13 @@ public class PriorityScheduler extends Scheduler {
 
             // تحديث الوقت
             currentTime++;
+        }
+
+        for(Process process : processes){
+
+//            process.
+
+            System.out.println("Name: " + process.getName()+" Wait: "+ process.getWaitingTime());
         }
 
         return processorLogs;

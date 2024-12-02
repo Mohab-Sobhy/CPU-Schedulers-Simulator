@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.List;
 
 public abstract class Scheduler {
@@ -5,6 +6,7 @@ public abstract class Scheduler {
     protected int totalProcesses;
 
     public Scheduler(List<Process> processes) {
+        processes.sort(Comparator.comparingInt(Process::getArrivalTime));
         this.processes = processes;
         totalProcesses = processes.size();
     }
