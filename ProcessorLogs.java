@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 
 public class ProcessorLogs {
-    private final ArrayList<String> logs = new ArrayList<>();
+    private final ArrayList<Process> logs = new ArrayList<>();
 
-    public void addLogUnit(String processName){
-        logs.add(processName);
+    public void addLogUnit(Process process){
+        logs.add(process);
     }
 
-    ArrayList<String> getLogs(){
+    ArrayList<Process> getLogs(){
         return logs;
     }
 
@@ -16,9 +16,17 @@ public class ProcessorLogs {
         StringBuilder logsString = new StringBuilder();
 
         for(int i=0 ; i<logs.size() ; i++){
-            logsString.append(i).append(" : ").append( logs.get(i) ).append('\n');
+
+            if(logs.get(i) == null){
+                logsString.append("null\n");
+            }
+            else{
+                logsString.append( logs.get(i).getName() ).append('\n');
+            }
+
         }
 
         return logsString.toString();
     }
+
 }

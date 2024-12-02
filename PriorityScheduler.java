@@ -86,7 +86,7 @@ public class PriorityScheduler extends Scheduler {
 
     // تنفيذ العملية الحالية
     private void executeCurrentProcess(int currentTime, Process currentProcess , ProcessorLogs processorLogs) {
-        processorLogs.addLogUnit( currentProcess.getName() );
+        processorLogs.addLogUnit( currentProcess );
         currentProcess.setCurrentBurstTime(currentProcess.getCurrentBurstTime() - 1);
     }
 }
