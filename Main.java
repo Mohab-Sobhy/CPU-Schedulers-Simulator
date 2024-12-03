@@ -7,7 +7,7 @@ public class Main {
         List<Process> processes = new ArrayList<>();
         processes.add(new Process("P1", 0, 4, 3, "Red"));   // Priority 3
         processes.add(new Process("P2", 2, 2, 2, "Blue"));   // Priority 2
-        processes.add(new Process("P3", 10, 5, 1, "Green"));  // Priority 1
+        processes.add(new Process("P3", 30, 9, 1, "Green"));  // Priority 1
         processes.add(new Process("P4", 4, 10, 4, "Yellow")); // Priority 4
         processes.add(new Process("P5", 6, 10, 5, "Purple")); // Priority 5
         SJF ps = new SJF(processes);

@@ -11,6 +11,11 @@ public class SchedulingGUI extends JFrame {
 
     public SchedulingGUI(ArrayList<Process> processLogs, List<Process> processesInformation) {
         this.processLogs = processLogs;
+
+        if(processLogs.getLast() == null){
+            processLogs.removeLast();
+        }
+
         setTitle("CPU Scheduling Graph");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,7 +34,7 @@ public class SchedulingGUI extends JFrame {
         int unitWidth = 40; // Width of each unit
         int totalWidth = processLogs.size() * unitWidth; // Total width based on the number of processes
         graphPanel.setPreferredSize(new Dimension(totalWidth, 300)); // Set preferred size dynamically
-        graphPanel.setBackground(Color.WHITE);
+        graphPanel.setBackground(Color.DARK_GRAY);
 
         // Wrap the graphPanel in a JScrollPane for horizontal scrolling
         JScrollPane graphScrollPane = new JScrollPane(graphPanel);
@@ -40,11 +45,11 @@ public class SchedulingGUI extends JFrame {
         // Right section: Process Info
         JPanel processInfoPanel = new JPanel();
         processInfoPanel.setLayout(new GridLayout(0, 1));
-        processInfoPanel.setPreferredSize(new Dimension(200, 300));
-        processInfoPanel.setBackground(Color.DARK_GRAY);
+        processInfoPanel.setPreferredSize(new Dimension(340, 300));
+        processInfoPanel.setBackground(Color.black);
 
         JLabel titleLabel = new JLabel("Processes Information", JLabel.CENTER);
-        titleLabel.setForeground(Color.RED);
+        titleLabel.setForeground(Color.WHITE);
         processInfoPanel.add(titleLabel);
 
         for (Process process : processesInformation) {
@@ -73,9 +78,9 @@ public class SchedulingGUI extends JFrame {
 
     private void drawGraph(Graphics g) {
         int xStart = 20; // Starting horizontal position
-        int rowHeight = 30; // Height of each row
-        int unitWidth = 40; // Width of each unit
-        int yStart = 50; // Starting vertical position
+        int rowHeight = 50; // Height of each row
+        int unitWidth = 30; // Width of each unit
+        int yStart = 20; // Starting vertical position
 
         // Mapping each process to a row based on its name
         Map<String, Integer> processRows = new HashMap<>();
@@ -127,6 +132,8 @@ public class SchedulingGUI extends JFrame {
                     return Color.BLACK;
                 case "white":
                     return Color.WHITE;
+                case "purple":
+                    return Color.MAGENTA;
                 default:
                     // Assume the color is in Hex format (like #FF0000)
                     return Color.decode(colorStr);

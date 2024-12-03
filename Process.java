@@ -115,4 +115,9 @@ public class Process {
     public String toString() {
         return "Process{name='" + name + "', arrivalTime=" + arrivalTime + ", burstTime=" + burstTime + ", priority=" + priority + ", color='" + color + "'}";
     }
+
+    public int age() {
+        int wt = getWaitingTime();
+        return getBurstTime() - wt;
+    }
 }

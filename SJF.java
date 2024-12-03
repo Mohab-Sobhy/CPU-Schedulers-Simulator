@@ -15,7 +15,9 @@ public class SJF extends Scheduler {
     public ProcessorLogs simulate() {
 
         ProcessorLogs processorLogs = new ProcessorLogs();
-        Comparator<Process> priorityComparator = Comparator.comparingInt(this::Age);
+
+
+        Comparator<Process> priorityComparator = Comparator.comparingInt(Process::age);
         PriorityQueue<Process> readyQueue = new PriorityQueue<>(priorityComparator);
 
 
@@ -34,7 +36,7 @@ public class SJF extends Scheduler {
             addNewArrivingProcessesToQueue(currentTime, readyQueue);
 
 
-            PriorityQueue<Process> updatedQueue = new PriorityQueue<>(Comparator.comparingInt(this::Age));
+            PriorityQueue<Process> updatedQueue = new PriorityQueue<>(Comparator.comparingInt(Process::age));
             updatedQueue.addAll(readyQueue);
             readyQueue = updatedQueue;
 
@@ -97,7 +99,5 @@ public class SJF extends Scheduler {
         currentProcess.setCurrentBurstTime(currentProcess.getCurrentBurstTime() - 1);
     }
 
-    private int Age(Process process) {
-        return process.getBurstTime() - process.getWaitingTime();
-    }
+
 }
