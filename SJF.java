@@ -9,7 +9,6 @@ public class SJF extends Scheduler {
     public SJF(List<Process> processes) {
         super(processes);
     }
-    ProcessorLogs logs = new ProcessorLogs();
 
     @Override
     public ProcessorLogs simulate() {

@@ -136,6 +136,12 @@ public class SchedulingGUI extends JFrame {
                     return Color.WHITE;
                 case "purple":
                     return Color.MAGENTA;
+                case "cyan":
+                    return Color.CYAN;
+                case "orange":
+                    return Color.ORANGE;
+                case "pink":
+                    return Color.PINK;
                 default:
                     // Assume the color is in Hex format (like #FF0000)
                     return Color.decode(colorStr);

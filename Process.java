@@ -10,6 +10,7 @@ public class Process {
     private boolean isRunning;
     private int currentBurstTime;
 
+
     // Constructor
     public Process(String name, int arrivalTime, int burstTime, int priority, String color) {
         this.name = name;
