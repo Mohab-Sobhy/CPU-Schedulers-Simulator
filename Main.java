@@ -16,10 +16,7 @@ public class Main {
 
         SchedulingReportGenerator schedulingReportGenerator = new SchedulingReportGenerator(processes);
 
-        SwingUtilities.invokeLater(() -> {
-            SchedulingGUI gui = new SchedulingGUI(processorLogs.getLogs() , processes );
-            gui.setVisible(true);
-        });
+        SchedulingGUI gui = new SchedulingGUI(processorLogs.getLogs() , processes );
 
         //System.out.println(processorLogs.toString());
     }

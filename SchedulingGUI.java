@@ -74,6 +74,8 @@ public class SchedulingGUI extends JFrame {
         statsPanel.add(statsLabel);
 
         add(statsPanel, BorderLayout.SOUTH);
+
+        setVisible(true);
     }
 
     private void drawGraph(Graphics g) {
@@ -144,15 +146,4 @@ public class SchedulingGUI extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
-        // Example usage with mock data for testing
-        ArrayList<Process> processLogs = new ArrayList<>();
-        // Add some test processes to processLogs here
-
-        List<Process> processesInformation = new ArrayList<>();
-        // Add some test process information to processesInformation here
-
-        SchedulingGUI gui = new SchedulingGUI(processLogs, processesInformation);
-        gui.setVisible(true);
-    }
 }
