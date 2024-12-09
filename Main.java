@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
         List<Process> processes = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
@@ -28,12 +29,7 @@ public class Main {
             processes.add( new Process(name, arrivalTime, burstTime, priorityTime, color) );
         }
 
-//        processes.add(new Process("P1", 0, 17, 4, "Red"));
-//        processes.add(new Process("P2", 3, 6, 9, "Blue"));
-//        processes.add(new Process("P3", 4, 10, 3, "Green"));
-//        processes.add(new Process("P4", 29, 4, 8, "Yellow"));
-
-        Scheduler scheduler = new PriorityScheduler( processes );
+        Scheduler scheduler = new PriorityScheduler( processes );// polymorphism supported
 
         ProcessorLogs processorLogs = scheduler.simulate();
 

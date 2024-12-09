@@ -5,15 +5,18 @@ public class FCAIScheduler extends Scheduler {
     private int scheduledProcessesCount = 0;
     private double V1;
     private double V2;
-    private final int contextSwitchingTime; // Context switching time
+    private final int contextSwitchingTime;
     private final Map<Process, Integer> executedTimeMap = new HashMap<>();
+    private final Map<Process, List<Integer>> quantumHistoryMap = new HashMap<>(); // Map to track quantum updates
 
     public FCAIScheduler(List<Process> processes) {
         super(processes);
-        this.contextSwitchingTime = 0; // Initialize context switching time
+        this.contextSwitchingTime = 0;
         calculateV1AndV2();
         for (Process process : processes) {
-            executedTimeMap.put(process, 0); // Initialize executed time map
+            executedTimeMap.put(process, 0);
+            quantumHistoryMap.put(process, new ArrayList<>());
+            quantumHistoryMap.get(process).add(process.getQuantum());
         }
     }
 
@@ -21,7 +24,7 @@ public class FCAIScheduler extends Scheduler {
         int lastArrivalTime = 0;
         int maxBurstTime = 0;
 
-        lastArrivalTime = processes.getLast().getArrivalTime();
+        lastArrivalTime = processes.get(processes.size() - 1).getArrivalTime();
         for (Process p : processes) {
             if (p.getBurstTime() > maxBurstTime) {
                 maxBurstTime = p.getBurstTime();
@@ -63,15 +66,16 @@ public class FCAIScheduler extends Scheduler {
 
                 if (currentProcess.getCurrentBurstTime() <= 0) {
                     completedProcessesCount++;
-                    executedTimeMap.put(currentProcess, 0); // Reset executed time
+                    executedTimeMap.put(currentProcess, 0);
                     currentProcess = null;
 
                     addContextSwitchingTime(processorLogs, contextSwitchingTime);
                     currentTime += contextSwitchingTime;
                 } else if (executedTime >= executionLimit) {
-                    currentProcess.setQuantum(currentProcess.getQuantum() + 2); // Increment quantum
+                    currentProcess.setQuantum(currentProcess.getQuantum() + 2);
+                    quantumHistoryMap.get(currentProcess).add(currentProcess.getQuantum());
                     readyQueue.add(currentProcess);
-                    executedTimeMap.put(currentProcess, 0); // Reset executed time
+                    executedTimeMap.put(currentProcess, 0);
                     currentProcess = null;
 
                     addContextSwitchingTime(processorLogs, contextSwitchingTime);
@@ -97,6 +101,8 @@ public class FCAIScheduler extends Scheduler {
             process.setCompletionTime(process.getTurnaroundTime() + process.getArrivalTime());
         }
 
+        printQuantumHistory();
+
         return processorLogs;
     }
 
@@ -111,12 +117,22 @@ public class FCAIScheduler extends Scheduler {
     private void executeCurrentProcess(int currentTime, Process currentProcess, ProcessorLogs processorLogs) {
         processorLogs.addLogUnit(currentProcess);
         currentProcess.setCurrentBurstTime(currentProcess.getCurrentBurstTime() - 1);
-        executedTimeMap.put(currentProcess, executedTimeMap.get(currentProcess) + 1); // Increment executed time
+        executedTimeMap.put(currentProcess, executedTimeMap.get(currentProcess) + 1);
     }
 
     private void addContextSwitchingTime(ProcessorLogs processorLogs, int contextSwitchingTime) {
         for (int i = 0; i < contextSwitchingTime; i++) {
-            processorLogs.addLogUnit(null); // Log idle time during context switching
+            processorLogs.addLogUnit(null);
         }
+    }
+
+    private void printQuantumHistory() {
+        System.out.println("Quantum History for Each Process:");
+        for (Map.Entry<Process, List<Integer>> entry : quantumHistoryMap.entrySet()) {
+            Process process = entry.getKey();
+            List<Integer> history = entry.getValue();
+            System.out.println("Process " + process.getName() + ": " + history);
+        }
+        System.out.println("--------------------------------");
     }
 }
