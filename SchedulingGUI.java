@@ -21,7 +21,6 @@ public class SchedulingGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Top section: Graph
         JPanel graphPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -30,7 +29,6 @@ public class SchedulingGUI extends JFrame {
             }
         };
 
-        // Calculate dynamic width based on the number of processLogs
         int unitWidth = 40; // Width of each unit
         int totalWidth = processLogs.size() * unitWidth; // Total width based on the number of processes
         graphPanel.setPreferredSize(new Dimension(totalWidth, 300)); // Set preferred size dynamically
@@ -105,7 +103,6 @@ public class SchedulingGUI extends JFrame {
                 g.drawRect(x, y, unitWidth, rowHeight - 10);
                 g.drawString(process.getName(), x + 5, y + 15); // Draw the process name
             } else {
-                // Idle time
                 g.setColor(Color.LIGHT_GRAY);
                 g.fillRect(x, y, unitWidth, rowHeight - 10);
                 g.setColor(Color.BLACK);
@@ -113,12 +110,10 @@ public class SchedulingGUI extends JFrame {
                 g.drawString("Idle", x + 5, y + 15);
             }
 
-            // Move horizontal position to the next unit
             xStart += unitWidth;
         }
     }
 
-    // Method to parse color from string
     private Color parseColor(String colorStr) {
         try {
             switch (colorStr.toLowerCase()) {
@@ -143,11 +138,9 @@ public class SchedulingGUI extends JFrame {
                 case "pink":
                     return Color.PINK;
                 default:
-                    // Assume the color is in Hex format (like #FF0000)
                     return Color.decode(colorStr);
             }
         } catch (NumberFormatException e) {
-            // Return a default color if the color is unrecognized
             return Color.GRAY;
         }
     }

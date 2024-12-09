@@ -9,6 +9,7 @@ public class Process {
     private int completionTime;
     private boolean isRunning;
     private int currentBurstTime;
+    private int quantum;
 
 
     // Constructor
@@ -111,6 +112,17 @@ public class Process {
     public void setCurrentBurstTime(int currentBurstTime){
         this.currentBurstTime = currentBurstTime;
     }
+
+    //
+    public int getQuantum(){
+        return quantum;
+    }
+
+    public void setQuantum(int quantum){
+        this.quantum = quantum;
+    }
+
+
 
     @Override
     public String toString() {

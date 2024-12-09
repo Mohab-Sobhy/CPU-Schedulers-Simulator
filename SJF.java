@@ -24,14 +24,12 @@ public class SJF extends Scheduler {
         int currentTime = 0;
         Process currentProcess = null;
 
-        // استمر حتى تنتهي جميع العمليات
         while (completedProcessesCount < processes.size()) {
 
             for (Process process : readyQueue) {
                 process.setWaitingTime( process.getWaitingTime()+1 );
             }
 
-            // إضافة العمليات التي وصلت في الوقت الحالي إلى قائمة الانتظار
             addNewArrivingProcessesToQueue(currentTime, readyQueue);
 
 
@@ -40,19 +38,16 @@ public class SJF extends Scheduler {
             readyQueue = updatedQueue;
 
 
-            // إذا لم تكن هناك عملية حالياً، اختر العملية التالية من قائمة الانتظار
             if (currentProcess == null || currentProcess.getCurrentBurstTime() == 0) {
                 completedProcessesCount = handleProcessCompletion(currentTime, currentProcess);
                 currentProcess = readyQueue.poll();
                 completedProcessesCount = handleNewProcessStart(currentTime, currentProcess, processorLogs);
             }
 
-            // تنفيذ العملية الحالية إذا كانت موجودة
             if (currentProcess != null) {
                 executeCurrentProcess(currentTime, currentProcess, processorLogs);
             }
 
-            // تحديث الوقت
             currentTime++;
         }
 
@@ -66,7 +61,6 @@ public class SJF extends Scheduler {
         return processorLogs;
     }
 
-    // إضافة العمليات التي وصلت في الوقت الحالي إلى قائمة الانتظار
     private void addNewArrivingProcessesToQueue(int currentTime, PriorityQueue<Process> readyQueue) {
         while (scheduledProcessesCount < processes.size() && processes.get(scheduledProcessesCount).getArrivalTime() <= currentTime) {
             readyQueue.add(processes.get(scheduledProcessesCount));
@@ -74,7 +68,6 @@ public class SJF extends Scheduler {
         }
     }
 
-    // التعامل مع انتهاء العملية الحالية
     private int handleProcessCompletion(int currentTime, Process currentProcess) {
         if (currentProcess != null && currentProcess.getCurrentBurstTime() == 0) {
             completedProcessesCount++;
@@ -82,7 +75,6 @@ public class SJF extends Scheduler {
         return completedProcessesCount;
     }
 
-    // التعامل مع بدء العملية الجديدة
     private int handleNewProcessStart(int currentTime, Process currentProcess, ProcessorLogs processorLogs) {
         if (currentProcess != null) {
             //start new process
@@ -92,11 +84,9 @@ public class SJF extends Scheduler {
         return completedProcessesCount;
     }
 
-    // تنفيذ العملية الحالية
     private void executeCurrentProcess(int currentTime, Process currentProcess , ProcessorLogs processorLogs) {
         processorLogs.addLogUnit( currentProcess );
         currentProcess.setCurrentBurstTime(currentProcess.getCurrentBurstTime() - 1);
     }
-
 
 }
