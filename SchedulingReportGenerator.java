@@ -3,6 +3,8 @@ import java.util.List;
 import java.lang.Math;
 
 public class SchedulingReportGenerator {
+    private double averageWaitingTime;
+    private double averageTurnaroundTime;
 
     SchedulingReportGenerator(List<Process> processes){
         processes.sort(Comparator.comparingInt(Process::getCompletionTime));
@@ -17,12 +19,20 @@ public class SchedulingReportGenerator {
             totalTurnaroundTime += process.getTurnaroundTime();
         }
 
-        float averageWaitingTime = totalWaitingTime / processes.size();
-        float averageTurnaroundTime = totalTurnaroundTime / processes.size();
+        averageWaitingTime = Math.ceil( totalWaitingTime / processes.size() );
+        averageTurnaroundTime = Math.ceil( totalTurnaroundTime / processes.size() );
 
-        System.out.println( "Average Waiting Time: " + Math.ceil(averageWaitingTime) );
-        System.out.println( "Average Turnaround Time: " + Math.ceil(averageTurnaroundTime) );
+        System.out.println( "Average Waiting Time: " + getAverageWaitingTime() );
+        System.out.println( "Average Turnaround Time: " + getAverageTurnaroundTime() );
 
+    }
+
+    int getAverageWaitingTime(){
+        return (int)averageWaitingTime;
+    }
+
+    int getAverageTurnaroundTime(){
+        return (int)averageTurnaroundTime;
     }
 
 }

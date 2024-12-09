@@ -10,6 +10,7 @@ public class Process {
     private boolean isRunning;
     private int currentBurstTime;
     private int quantum;
+    private int fcaiFactor;
 
 
     // Constructor
@@ -120,6 +121,15 @@ public class Process {
 
     public void setQuantum(int quantum){
         this.quantum = quantum;
+    }
+
+    //
+    public int getFcaiFactor(){
+        return fcaiFactor;
+    }
+
+    public void setFcaiFactor(int v1 , int v2){
+        fcaiFactor = (10 - this.getPriority()) + (this.getArrivalTime() / v1) + (this.getCurrentBurstTime() / v2);
     }
 
 

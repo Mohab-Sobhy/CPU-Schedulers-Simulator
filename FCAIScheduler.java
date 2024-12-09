@@ -8,9 +8,9 @@ public class FCAIScheduler extends Scheduler {
     private final int contextSwitchingTime; // Context switching time
     private final Map<Process, Integer> executedTimeMap = new HashMap<>();
 
-    public FCAIScheduler(List<Process> processes, int contextSwitchingTime) {
+    public FCAIScheduler(List<Process> processes) {
         super(processes);
-        this.contextSwitchingTime = contextSwitchingTime; // Initialize context switching time
+        this.contextSwitchingTime = 0; // Initialize context switching time
         calculateV1AndV2();
         for (Process process : processes) {
             executedTimeMap.put(process, 0); // Initialize executed time map
@@ -21,10 +21,8 @@ public class FCAIScheduler extends Scheduler {
         int lastArrivalTime = 0;
         int maxBurstTime = 0;
 
+        lastArrivalTime = processes.getLast().getArrivalTime();
         for (Process p : processes) {
-            if (p.getArrivalTime() > lastArrivalTime) {
-                lastArrivalTime = p.getArrivalTime();
-            }
             if (p.getBurstTime() > maxBurstTime) {
                 maxBurstTime = p.getBurstTime();
             }

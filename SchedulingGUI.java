@@ -9,7 +9,7 @@ public class SchedulingGUI extends JFrame {
 
     private ArrayList<Process> processLogs;
 
-    public SchedulingGUI(ArrayList<Process> processLogs, List<Process> processesInformation) {
+    public SchedulingGUI(ArrayList<Process> processLogs, List<Process> processesInformation, int averageWaitingTime, int averageTurnaroundTime) {
         this.processLogs = processLogs;
 
         if(processLogs.getLast() == null){
@@ -63,12 +63,10 @@ public class SchedulingGUI extends JFrame {
 
         // Bottom section: Statistics
         JPanel statsPanel = new JPanel();
-        statsPanel.setPreferredSize(new Dimension(800, 100));
         statsPanel.setBackground(Color.BLACK);
-
-        JLabel statsLabel = new JLabel("Average Waiting Time: fake number  | Average Turnaround Time: fake number");
-        statsLabel.setForeground(Color.RED);
-        statsLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        JLabel statsLabel = new JLabel( "Average Waiting Time: " + averageWaitingTime + " | Average Turnaround Time: " + averageTurnaroundTime );
+        statsLabel.setForeground(Color.GRAY);
+        statsLabel.setFont(new Font("Arial", Font.BOLD, 22));
         statsPanel.add(statsLabel);
 
         add(statsPanel, BorderLayout.SOUTH);
